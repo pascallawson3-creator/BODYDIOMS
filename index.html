@@ -1,0 +1,1732 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IdiomVault — Master Natural English</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+/* ═══════════════════════════════════════════════════
+   CSS CUSTOM PROPERTIES — THEME SYSTEM
+═══════════════════════════════════════════════════ */
+:root {
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'Plus Jakarta Sans', system-ui, sans-serif;
+
+  /* Shared */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --transition: 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Badge colors (type-specific, fixed) */
+  --badge-idiom-bg: #1e3a5f;
+  --badge-idiom-tx: #7eb8f7;
+  --badge-proverb-bg: #1a3d2e;
+  --badge-proverb-tx: #6ecf9a;
+  --badge-phrase-bg: #3d2e1a;
+  --badge-phrase-tx: #f0a84a;
+  --badge-slang-bg: #3a1a2e;
+  --badge-slang-tx: #e07ec4;
+  --badge-phrasal-bg: #1a2e3a;
+  --badge-phrasal-tx: #7ed4f7;
+}
+
+[data-theme="dark"] {
+  --bg-page:      #0c0b0a;
+  --bg-surface:   #141312;
+  --bg-card:      #1a1917;
+  --bg-card-alt:  #1f1e1c;
+  --bg-input:     #1f1e1b;
+  --bg-btn:       #252320;
+  --bg-overlay:   rgba(0,0,0,0.88);
+
+  --border:       rgba(255,255,255,0.07);
+  --border-hover: rgba(255,255,255,0.14);
+
+  --tx-primary:   #f2ede6;
+  --tx-secondary: #a09080;
+  --tx-muted:     #5a524a;
+  --tx-accent:    #e8c97a;
+
+  --accent:       #e8c97a;
+  --accent-dim:   #8a7040;
+  --accent-glow:  rgba(232,201,122,0.12);
+
+  --hero-from:    #111009;
+  --hero-to:      #1a1710;
+  --hero-line:    rgba(232,201,122,0.15);
+}
+
+[data-theme="light"] {
+  --bg-page:      #f8f5ef;
+  --bg-surface:   #f0ece3;
+  --bg-card:      #ffffff;
+  --bg-card-alt:  #faf8f4;
+  --bg-input:     #ffffff;
+  --bg-btn:       #f0ece3;
+  --bg-overlay:   rgba(0,0,0,0.75);
+
+  --border:       rgba(0,0,0,0.09);
+  --border-hover: rgba(0,0,0,0.18);
+
+  --tx-primary:   #1c1914;
+  --tx-secondary: #7a6e60;
+  --tx-muted:     #b0a898;
+  --tx-accent:    #8a6010;
+
+  --accent:       #8a6010;
+  --accent-dim:   #c8a840;
+  --accent-glow:  rgba(138,96,16,0.08);
+
+  --hero-from:    #f4efe3;
+  --hero-to:      #ece7d8;
+  --hero-line:    rgba(138,96,16,0.12);
+}
+
+/* ═══════════════════════════════════════════════════
+   RESET & BASE
+═══════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-page);
+  color: var(--tx-primary);
+  line-height: 1.6;
+  transition: background var(--transition), color var(--transition);
+  min-height: 100vh;
+}
+
+button { font-family: var(--font-body); cursor: pointer; border: none; background: none; }
+input  { font-family: var(--font-body); }
+
+/* ═══════════════════════════════════════════════════
+   FLOATING NAV
+═══════════════════════════════════════════════════ */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 200;
+  padding: 0 24px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: background var(--transition);
+}
+
+.nav-logo {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  text-decoration: none;
+}
+.nav-logo-mark {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: -0.02em;
+}
+.nav-logo-sup {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--tx-muted);
+}
+
+.nav-right { display: flex; align-items: center; gap: 8px; }
+
+.nav-stat {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--tx-secondary);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+.nav-stat span { color: var(--accent); }
+
+.theme-btn {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--bg-btn);
+  border: 1px solid var(--border);
+  color: var(--tx-secondary);
+  font-size: 15px;
+  transition: all var(--transition);
+}
+.theme-btn:hover { border-color: var(--border-hover); color: var(--accent); }
+
+/* ═══════════════════════════════════════════════════
+   HERO SECTION
+═══════════════════════════════════════════════════ */
+.hero {
+  margin-top: 60px;
+  padding: 72px 24px 60px;
+  background: linear-gradient(160deg, var(--hero-from), var(--hero-to));
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+
+/* Decorative grid lines */
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--hero-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--hero-line) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%);
+  pointer-events: none;
+}
+
+/* Glow orb */
+.hero::after {
+  content: '';
+  position: absolute;
+  top: -60px; left: 50%; transform: translateX(-50%);
+  width: 600px; height: 300px;
+  background: radial-gradient(ellipse, var(--accent-glow) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
+  padding: 5px 14px;
+  border: 1px solid var(--accent-dim);
+  border-radius: 999px;
+  margin-bottom: 22px;
+  position: relative;
+}
+.hero-eyebrow::before {
+  content: '';
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 6vw, 68px);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  color: var(--tx-primary);
+  margin-bottom: 18px;
+  position: relative;
+}
+.hero-title em {
+  font-style: italic;
+  color: var(--accent);
+}
+
+.hero-subtitle {
+  font-size: clamp(15px, 2vw, 18px);
+  font-weight: 300;
+  color: var(--tx-secondary);
+  max-width: 520px;
+  margin: 0 auto 36px;
+  line-height: 1.7;
+  position: relative;
+}
+
+.hero-stats {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  position: relative;
+  flex-wrap: wrap;
+}
+.hero-stat {
+  padding: 0 28px;
+  border-right: 1px solid var(--border);
+  text-align: center;
+}
+.hero-stat:last-child { border-right: none; }
+.hero-stat-num {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1;
+  display: block;
+}
+.hero-stat-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--tx-muted);
+  margin-top: 4px;
+  display: block;
+}
+
+/* ═══════════════════════════════════════════════════
+   CONTROLS BAR
+═══════════════════════════════════════════════════ */
+.controls {
+  position: sticky;
+  top: 60px;
+  z-index: 100;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 24px;
+  transition: background var(--transition);
+}
+
+.controls-top {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto 12px;
+  flex-wrap: wrap;
+}
+
+.search-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 220px;
+}
+.search-icon {
+  position: absolute;
+  left: 13px; top: 50%;
+  transform: translateY(-50%);
+  color: var(--tx-muted);
+  pointer-events: none;
+  font-size: 14px;
+}
+.search-input {
+  width: 100%;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 10px 14px 10px 38px;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--tx-primary);
+  outline: none;
+  transition: border-color var(--transition), background var(--transition);
+}
+.search-input::placeholder { color: var(--tx-muted); }
+.search-input:focus { border-color: var(--accent-dim); background: var(--bg-card); }
+.search-clear {
+  position: absolute;
+  right: 10px; top: 50%;
+  transform: translateY(-50%);
+  width: 20px; height: 20px;
+  display: none;
+  align-items: center; justify-content: center;
+  border-radius: 50%;
+  background: var(--bg-btn);
+  color: var(--tx-secondary);
+  font-size: 11px;
+  transition: all var(--transition);
+}
+.search-clear:hover { background: var(--border-hover); color: var(--tx-primary); }
+.search-clear.visible { display: flex; }
+
+.ctrl-btn {
+  display: flex; align-items: center; gap: 6px;
+  padding: 9px 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: var(--bg-btn);
+  color: var(--tx-secondary);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  transition: all var(--transition);
+  white-space: nowrap;
+}
+.ctrl-btn:hover { border-color: var(--border-hover); color: var(--tx-primary); }
+.ctrl-btn.active { background: var(--accent); color: #1a1409; border-color: transparent; }
+
+/* Filter pills row */
+.controls-filters {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.filter-group {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.filter-divider {
+  width: 1px; height: 20px;
+  background: var(--border);
+  margin: 0 4px;
+}
+.filter-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--tx-muted);
+}
+
+.pill {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--tx-secondary);
+  transition: all var(--transition);
+  white-space: nowrap;
+}
+.pill:hover { border-color: var(--border-hover); color: var(--tx-primary); }
+.pill.on { border-color: transparent; }
+
+/* type pill colors */
+.pill[data-type="idiom"].on   { background: var(--badge-idiom-bg); color: var(--badge-idiom-tx); border-color: transparent; }
+.pill[data-type="proverb"].on { background: var(--badge-proverb-bg); color: var(--badge-proverb-tx); border-color: transparent; }
+.pill[data-type="phrase"].on  { background: var(--badge-phrase-bg); color: var(--badge-phrase-tx); border-color: transparent; }
+.pill[data-type="slang"].on   { background: var(--badge-slang-bg); color: var(--badge-slang-tx); border-color: transparent; }
+.pill[data-type="phrasal verb"].on { background: var(--badge-phrasal-bg); color: var(--badge-phrasal-tx); border-color: transparent; }
+.pill[data-type="All"].on, .pill[data-cat="All"].on { background: var(--accent); color: #1a1409; }
+
+/* ═══════════════════════════════════════════════════
+   RESULTS BAR
+═══════════════════════════════════════════════════ */
+.results-bar {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 14px 24px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--tx-muted);
+  letter-spacing: 0.04em;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.results-count strong { color: var(--tx-secondary); }
+.view-toggle { display: flex; gap: 4px; }
+.view-btn {
+  width: 30px; height: 30px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--tx-muted);
+  font-size: 13px;
+  transition: all var(--transition);
+}
+.view-btn.on { background: var(--bg-btn); border-color: var(--border-hover); color: var(--tx-primary); }
+
+/* ═══════════════════════════════════════════════════
+   MAIN GRID
+═══════════════════════════════════════════════════ */
+.main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 24px 80px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  gap: 16px;
+}
+.grid.list-view {
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+/* ═══════════════════════════════════════════════════
+   THE CARD
+═══════════════════════════════════════════════════ */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+  animation: rise 0.35s ease both;
+}
+.card:hover {
+  transform: translateY(-3px);
+  border-color: var(--border-hover);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.25);
+}
+@keyframes rise {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Category color accent bar */
+.card-bar {
+  height: 3px;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+/* Card body */
+.card-body { padding: 20px 20px 16px; flex: 1; display: flex; flex-direction: column; }
+
+/* Top meta row */
+.card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  gap: 8px;
+}
+.card-num {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--tx-muted);
+}
+.card-badges { display: flex; gap: 5px; align-items: center; }
+
+.badge {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 999px;
+}
+.badge-idiom   { background: var(--badge-idiom-bg);   color: var(--badge-idiom-tx); }
+.badge-proverb { background: var(--badge-proverb-bg); color: var(--badge-proverb-tx); }
+.badge-phrase  { background: var(--badge-phrase-bg);  color: var(--badge-phrase-tx); }
+.badge-slang   { background: var(--badge-slang-bg);   color: var(--badge-slang-tx); }
+.badge-phrasal { background: var(--badge-phrasal-bg); color: var(--badge-phrasal-tx); }
+
+.badge-cat {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--tx-muted);
+  padding: 3px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+}
+
+/* Expression */
+.card-expr {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 600;
+  font-style: italic;
+  line-height: 1.25;
+  color: var(--tx-primary);
+  margin-bottom: 14px;
+  flex-shrink: 0;
+}
+
+/* Divider */
+.card-divider {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.card-divider-line { flex: 1; height: 1px; background: var(--border); }
+.card-divider-dot  { width: 4px; height: 4px; border-radius: 50%; background: var(--border-hover); flex-shrink: 0; }
+
+/* Meaning block */
+.card-meaning-block { margin-bottom: 14px; flex: 1; }
+.card-meaning-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tx-muted);
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.card-meaning-label::before {
+  content: '';
+  width: 12px; height: 1px;
+  background: var(--tx-muted);
+}
+.card-meaning {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.65;
+  color: var(--tx-primary);
+  opacity: 0.9;
+}
+
+/* Example block */
+.card-example-block { margin-bottom: 16px; }
+.card-example-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tx-muted);
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.card-example-label::before {
+  content: '';
+  width: 12px; height: 1px;
+  background: var(--tx-muted);
+}
+.card-example {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-style: italic;
+  line-height: 1.6;
+  color: var(--tx-secondary);
+  background: var(--bg-card-alt);
+  border-left: 2px solid var(--border-hover);
+  padding: 8px 12px;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+/* Highlight idiom in example */
+.card-example .hl {
+  color: var(--accent);
+  font-style: italic;
+  font-weight: 600;
+}
+
+/* Card actions */
+.card-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  gap: 6px;
+}
+.card-action-group { display: flex; gap: 5px; }
+
+.act-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--tx-muted);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  transition: all var(--transition);
+}
+.act-btn:hover { border-color: var(--border-hover); color: var(--tx-secondary); background: var(--bg-btn); }
+.act-btn.fav-on { color: #e05060; border-color: rgba(224,80,96,0.3); background: rgba(224,80,96,0.08); }
+.act-btn.learned-on { color: #40c080; border-color: rgba(64,192,128,0.3); background: rgba(64,192,128,0.08); }
+.act-btn.copied { color: #40c080; }
+.act-btn.dl-loading { opacity: 0.5; pointer-events: none; }
+
+.act-icon { font-size: 13px; }
+
+/* ═══════════════════════════════════════════════════
+   LIST VIEW CARD VARIANT
+═══════════════════════════════════════════════════ */
+.grid.list-view .card { flex-direction: row; }
+.grid.list-view .card-bar { width: 3px; height: auto; flex-shrink: 0; }
+.grid.list-view .card-body { flex-direction: row; align-items: flex-start; gap: 20px; flex-wrap: wrap; }
+.grid.list-view .card-meta { flex-direction: column; align-items: flex-start; min-width: 120px; }
+.grid.list-view .card-expr { font-size: 18px; margin-bottom: 0; }
+.grid.list-view .card-meaning-block { flex: 1; min-width: 200px; margin-bottom: 0; }
+.grid.list-view .card-example-block { flex: 1; min-width: 200px; margin-bottom: 0; }
+.grid.list-view .card-actions { flex-direction: column; padding-top: 0; border-top: none; border-left: 1px solid var(--border); padding-left: 16px; }
+.grid.list-view .card-divider { display: none; }
+
+/* ═══════════════════════════════════════════════════
+   EMPTY & LOADER
+═══════════════════════════════════════════════════ */
+.empty-state {
+  grid-column: 1 / -1;
+  padding: 80px 24px;
+  text-align: center;
+  color: var(--tx-muted);
+}
+.empty-state-icon { font-size: 48px; margin-bottom: 16px; opacity: 0.4; }
+.empty-state-text { font-family: var(--font-display); font-size: 20px; font-style: italic; }
+
+/* ═══════════════════════════════════════════════════
+   PAGINATION
+═══════════════════════════════════════════════════ */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 32px 0 0;
+  flex-wrap: wrap;
+}
+.page-btn {
+  min-width: 36px; height: 36px;
+  padding: 0 10px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-btn);
+  color: var(--tx-secondary);
+  font-size: 13px;
+  font-weight: 600;
+  transition: all var(--transition);
+}
+.page-btn:hover { border-color: var(--border-hover); color: var(--tx-primary); }
+.page-btn.on { background: var(--accent); color: #1a1409; border-color: transparent; }
+.page-btn:disabled { opacity: 0.3; pointer-events: none; }
+.page-info { font-size: 12px; color: var(--tx-muted); padding: 0 8px; }
+
+/* ═══════════════════════════════════════════════════
+   LIGHTBOX
+═══════════════════════════════════════════════════ */
+.lb-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  z-index: 500;
+  background: var(--bg-overlay);
+  backdrop-filter: blur(6px);
+  align-items: center; justify-content: center;
+  padding: 24px;
+}
+.lb-overlay.open { display: flex; }
+
+.lb-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border-hover);
+  border-radius: var(--radius-xl);
+  max-width: 640px; width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  animation: lbIn 0.25s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+@keyframes lbIn {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.lb-close {
+  position: absolute;
+  top: 16px; right: 16px;
+  width: 32px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  background: var(--bg-btn);
+  border: 1px solid var(--border);
+  color: var(--tx-secondary);
+  font-size: 16px;
+  transition: all var(--transition);
+  z-index: 10;
+}
+.lb-close:hover { background: var(--border-hover); color: var(--tx-primary); }
+
+.lb-body { padding: 32px; }
+.lb-nav {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px 32px;
+  border-top: 1px solid var(--border);
+  gap: 10px;
+}
+.lb-nav-btn {
+  display: flex; align-items: center; gap: 6px;
+  padding: 9px 18px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: var(--bg-btn);
+  color: var(--tx-secondary);
+  font-size: 12px; font-weight: 600;
+  transition: all var(--transition);
+}
+.lb-nav-btn:hover { border-color: var(--border-hover); color: var(--tx-primary); }
+.lb-nav-btn.gold { background: var(--accent); color: #1a1409; border-color: transparent; }
+.lb-nav-btn.gold:hover { opacity: 0.9; }
+
+/* ═══════════════════════════════════════════════════
+   PROGRESS BAR (top of page)
+═══════════════════════════════════════════════════ */
+.progress-bar-wrap {
+  position: fixed;
+  top: 60px; left: 0; right: 0;
+  height: 2px;
+  z-index: 199;
+  background: transparent;
+  pointer-events: none;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-dim), var(--accent));
+  transition: width 0.5s ease;
+}
+
+/* ═══════════════════════════════════════════════════
+   TOAST NOTIFICATION
+═══════════════════════════════════════════════════ */
+.toast {
+  position: fixed;
+  bottom: 24px; left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: var(--bg-card);
+  border: 1px solid var(--border-hover);
+  border-radius: var(--radius-md);
+  padding: 11px 20px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--tx-primary);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  z-index: 1000;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+/* ═══════════════════════════════════════════════════
+   LEARN mode overlay on card
+═══════════════════════════════════════════════════ */
+.card-learned-overlay {
+  position: absolute;
+  top: 10px; right: 10px;
+  width: 22px; height: 22px;
+  background: rgba(64,192,128,0.15);
+  border: 1px solid rgba(64,192,128,0.35);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+.card.learned .card-learned-overlay { opacity: 1; }
+
+/* ═══════════════════════════════════════════════════
+   SHARE CARD TEMPLATE (off-screen, for export)
+═══════════════════════════════════════════════════ */
+#export-tpl {
+  position: fixed;
+  left: -9999px; top: 0;
+  width: 1080px; height: 600px;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════════════
+   SCROLLBAR
+═══════════════════════════════════════════════════ */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-surface); }
+::-webkit-scrollbar-thumb { background: var(--border-hover); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--tx-muted); }
+
+/* ═══════════════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════════════ */
+@media (max-width: 640px) {
+  .hero { padding: 48px 20px 40px; }
+  .hero-title { font-size: 30px; }
+  .hero-stats { gap: 0; }
+  .hero-stat { padding: 0 16px; }
+  .hero-stat-num { font-size: 22px; }
+  .controls { padding: 12px 16px; }
+  .main { padding: 16px 16px 60px; }
+  .grid { grid-template-columns: 1fr; gap: 12px; }
+  .grid.list-view .card { flex-direction: column; }
+  .grid.list-view .card-bar { width: 100%; height: 3px; }
+  .nav { padding: 0 16px; }
+  .nav-stat { display: none; }
+  .lb-body { padding: 20px; }
+  .lb-nav { padding: 12px 20px; }
+}
+
+/* ═══════════════════════════════════════════════════
+   PRINT
+═══════════════════════════════════════════════════ */
+@media print {
+  .nav, .controls, .results-bar, .pagination, .card-actions, .lb-overlay, .toast, .progress-bar-wrap { display: none !important; }
+  body { background: #fff; color: #111; }
+  .hero { background: #fff; padding: 20px; border: none; }
+  .hero::before, .hero::after { display: none; }
+  .main { padding: 20px; max-width: 100%; }
+  .grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .card { break-inside: avoid; box-shadow: none !important; transform: none !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ PROGRESS BAR ═══ -->
+<div class="progress-bar-wrap">
+  <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+</div>
+
+<!-- ═══ NAVIGATION ═══ -->
+<nav class="nav">
+  <a href="#" class="nav-logo">
+    <span class="nav-logo-mark">IdiomVault</span>
+    <span class="nav-logo-sup">by BODY</span>
+  </a>
+  <div class="nav-right">
+    <div class="nav-stat">
+      <span id="navLearnedCount">0</span>&nbsp;/ <span id="navTotalCount">—</span>&nbsp;learned
+    </div>
+    <div class="nav-stat">
+      ♥ <span id="navFavCount">0</span>&nbsp;saved
+    </div>
+    <button class="theme-btn" id="themeBtn" title="Toggle theme" onclick="toggleTheme()">☀</button>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero" id="top">
+  <div class="hero-eyebrow">Complete English Expression Collection</div>
+  <h1 class="hero-title">
+    Idiomatic <em>Expressions</em>
+  </h1>
+  <p class="hero-subtitle">
+    Master natural English through real idioms, proverbs, phrases, slang &amp; phrasal verbs — with clear meanings and authentic examples.
+  </p>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <span class="hero-stat-num" id="statTotal">—</span>
+      <span class="hero-stat-label">Expressions</span>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-num" id="statCats">—</span>
+      <span class="hero-stat-label">Categories</span>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-num" id="statLearned">0</span>
+      <span class="hero-stat-label">Mastered</span>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-num" id="statFavs">0</span>
+      <span class="hero-stat-label">Favourites</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CONTROLS ═══ -->
+<div class="controls" id="controls">
+  <div class="controls-top">
+    <!-- Search -->
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input class="search-input" id="searchInput" type="text" placeholder="Search expressions, meanings, categories…" oninput="onSearch(this.value)" autocomplete="off">
+      <button class="search-clear" id="searchClear" onclick="clearSearch()">✕</button>
+    </div>
+    <!-- Extras -->
+    <button class="ctrl-btn" id="favFilterBtn" onclick="toggleFavFilter()">♥ Favourites</button>
+    <button class="ctrl-btn" id="learnedFilterBtn" onclick="toggleLearnedFilter()">✓ Learned</button>
+    <button class="ctrl-btn" onclick="downloadAll()">⬇ Export All</button>
+  </div>
+
+  <div class="controls-filters">
+    <!-- Type filters -->
+    <span class="filter-label">Type</span>
+    <div class="filter-group" id="typeFilters">
+      <button class="pill on" data-type="All" onclick="setType(this)">All</button>
+      <button class="pill" data-type="idiom"        onclick="setType(this)">Idiom</button>
+      <button class="pill" data-type="proverb"      onclick="setType(this)">Proverb</button>
+      <button class="pill" data-type="phrase"       onclick="setType(this)">Phrase</button>
+      <button class="pill" data-type="slang"        onclick="setType(this)">Slang</button>
+      <button class="pill" data-type="phrasal verb" onclick="setType(this)">Phrasal Verb</button>
+    </div>
+    <div class="filter-divider"></div>
+    <!-- Category filters (generated dynamically) -->
+    <span class="filter-label">Category</span>
+    <div class="filter-group" id="catFilters"></div>
+  </div>
+</div>
+
+<!-- ═══ RESULTS BAR ═══ -->
+<div class="results-bar">
+  <div class="results-count" id="resultsCount"></div>
+  <div class="view-toggle">
+    <button class="view-btn on" id="gridViewBtn" onclick="setView('grid')" title="Grid view">⊞</button>
+    <button class="view-btn"   id="listViewBtn" onclick="setView('list')" title="List view">☰</button>
+  </div>
+</div>
+
+<!-- ═══ MAIN GRID ═══ -->
+<main class="main">
+  <div class="grid" id="grid"></div>
+  <div class="pagination" id="pagination"></div>
+</main>
+
+<!-- ═══ LIGHTBOX ═══ -->
+<div class="lb-overlay" id="lbOverlay" onclick="closeLB(event)">
+  <div class="lb-box" onclick="event.stopPropagation()">
+    <button class="lb-close" onclick="closeLB()">✕</button>
+    <div class="lb-body" id="lbBody"></div>
+    <div class="lb-nav">
+      <button class="lb-nav-btn" onclick="lbPrev()">← Previous</button>
+      <button class="lb-nav-btn gold" id="lbDlBtn" onclick="lbDownload()">⬇ Save as Image</button>
+      <button class="lb-nav-btn" onclick="lbNext()">Next →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TOAST ═══ -->
+<div class="toast" id="toast"></div>
+
+<!-- ═══ EXPORT TEMPLATE (off-screen) ═══ -->
+<div id="export-tpl"></div>
+
+<script>
+/* ═══════════════════════════════════════════════════
+   CATEGORY COLOR MAP
+═══════════════════════════════════════════════════ */
+const CAT_COLORS = {
+  "Luck & Fate":    "#2ECC88","Value":          "#E0B94A","Difficulty":     "#9B8DE0",
+  "Character":      "#D4607A","Bad Situations": "#E05050","Mistakes":       "#D4922A",
+  "Communication":  "#4A90D9","Encouragement":  "#3DB860","Work & Effort":  "#C8901A",
+  "Caution":        "#3AAA6A","Boundaries":     "#B07060","Appearance":     "#C050A8",
+  "Optimism":       "#28C080","Justice":        "#D06030","Consequences":   "#CC4020",
+  "Health":         "#4878C0","Control":        "#9840D0","Relationships":  "#C84080",
+  "Money":          "#38A028","Opportunities":  "#C89020","Humour":         "#E08820",
+  "Trends":         "#5050D0","Life & Death":   "#888888","Experience":     "#5A9040",
+  "Surprise":       "#A8A820","Suspicion":      "#B89030","Attitude":       "#3888B0",
+  "Responsibility": "#408860","Emotions":       "#D03060","Impossibility":  "#6868B0",
+  "Weather":        "#3060B0","Time":           "#9050A0","Knowledge":      "#508840",
+  "Freedom":        "#30A0A0","Influence":      "#A038A0","Youth":          "#D05838",
+  "Availability":   "#787878","Choices":        "#3870A8","Unity":          "#488040",
+  "Patience":       "#607838","Life & Fate":    "#389898","Success":        "#28A050",
+  "Socialising":    "#D05890","Progress":       "#4898C8","Avoidance":      "#A06840",
+  "Planning":       "#5870B0","Persistence":    "#40A870","Anger":          "#D04040",
+};
+function catColor(cat) { return CAT_COLORS[cat] || "#888"; }
+
+/* ═══════════════════════════════════════════════════
+   FULL DATASET — 148 expressions
+   (same core set, enriched with highlighted examples)
+═══════════════════════════════════════════════════ */
+const DATA = [
+  {n:1,  expr:"A blessing in disguise",                      type:"idiom",   cat:"Luck & Fate",    meaning:"Something that seems bad at first but turns out to be good.",             example:"Losing that job was <mark>a blessing in disguise</mark> — I found a much better one."},
+  {n:2,  expr:"A dime a dozen",                              type:"idiom",   cat:"Value",           meaning:"Something very common and therefore of little value.",                    example:"Talented singers are <mark>a dime a dozen</mark> these days."},
+  {n:3,  expr:"A piece of cake",                             type:"idiom",   cat:"Difficulty",      meaning:"Something very easy to do.",                                             example:"The exam was <mark>a piece of cake</mark> — I finished in 20 minutes."},
+  {n:4,  expr:"Actions speak louder than words",             type:"proverb", cat:"Character",       meaning:"What someone does matters more than what they say.",                     example:"He promised to help but never did — <mark>actions speak louder than words</mark>."},
+  {n:5,  expr:"Add insult to injury",                        type:"idiom",   cat:"Bad Situations",  meaning:"To make an already bad situation even worse.",                           example:"They cancelled my flight, then lost my bag — <mark>adding insult to injury</mark>!"},
+  {n:6,  expr:"Barking up the wrong tree",                   type:"idiom",   cat:"Mistakes",        meaning:"Pursuing a mistaken or misguided course of action.",                    example:"If you think I took your keys, you're <mark>barking up the wrong tree</mark>."},
+  {n:7,  expr:"Beat around the bush",                        type:"idiom",   cat:"Communication",   meaning:"Avoid the main topic; not speaking directly about the issue.",           example:"Stop <mark>beating around the bush</mark> and just tell me what happened."},
+  {n:8,  expr:"Break a leg",                                 type:"idiom",   cat:"Encouragement",   meaning:"Good luck! (especially said to performers before going on stage).",     example:"You're on in five minutes — <mark>break a leg</mark>!"},
+  {n:9,  expr:"Burn the midnight oil",                       type:"idiom",   cat:"Work & Effort",   meaning:"To work or study very late into the night.",                            example:"She <mark>burned the midnight oil</mark> to finish her dissertation."},
+  {n:10, expr:"By the skin of your teeth",                   type:"idiom",   cat:"Luck & Fate",     meaning:"Just barely; with very little margin to spare.",                        example:"I passed the exam <mark>by the skin of my teeth</mark> — I got 51%."},
+  {n:11, expr:"Call it a day",                               type:"phrase",  cat:"Work & Effort",   meaning:"To stop working and rest for the remainder of the day.",                example:"We've done enough for now — let's <mark>call it a day</mark>."},
+  {n:12, expr:"Caught between a rock and a hard place",      type:"idiom",   cat:"Bad Situations",  meaning:"Facing two equally difficult choices with no easy way out.",            example:"I can't afford rent or food — I'm <mark>caught between a rock and a hard place</mark>."},
+  {n:13, expr:"Cut corners",                                 type:"idiom",   cat:"Mistakes",        meaning:"Do something the cheapest or easiest way, sacrificing quality.",        example:"The builders <mark>cut corners</mark> and the roof started leaking."},
+  {n:14, expr:"Cry over spilled milk",                       type:"idiom",   cat:"Attitude",        meaning:"Be upset about something that cannot be changed.",                      example:"The deadline passed — no point <mark>crying over spilled milk</mark>."},
+  {n:15, expr:"Curiosity killed the cat",                    type:"proverb", cat:"Character",       meaning:"Being too inquisitive can lead to trouble or danger.",                  example:"Don't snoop through his messages — <mark>curiosity killed the cat</mark>."},
+  {n:16, expr:"Don't count your chickens before they hatch", type:"proverb", cat:"Caution",         meaning:"Don't assume success before it actually happens.",                      example:"I haven't got the offer yet — <mark>don't count your chickens</mark>."},
+  {n:17, expr:"Don't put all your eggs in one basket",       type:"proverb", cat:"Caution",         meaning:"Don't risk everything on a single venture.",                            example:"Invest in different assets — <mark>don't put all your eggs in one basket</mark>."},
+  {n:18, expr:"Draw the line",                               type:"phrase",  cat:"Boundaries",      meaning:"Set a firm limit on what you will tolerate.",                           example:"I <mark>draw the line</mark> at working weekends — that's my family time."},
+  {n:19, expr:"Drop in the bucket",                          type:"idiom",   cat:"Value",           meaning:"A small, insignificant amount compared to what is needed.",             example:"The donation was generous, but it's just <mark>a drop in the bucket</mark>."},
+  {n:20, expr:"Dressed to the nines",                        type:"idiom",   cat:"Appearance",      meaning:"Dressed very elegantly and stylishly.",                                 example:"She arrived at the gala <mark>dressed to the nines</mark>."},
+  {n:21, expr:"Every cloud has a silver lining",             type:"proverb", cat:"Optimism",        meaning:"There is something positive in every bad situation.",                   example:"I missed the flight, but <mark>every cloud has a silver lining</mark> — I met my partner."},
+  {n:22, expr:"Eye for an eye",                              type:"phrase",  cat:"Justice",         meaning:"Punishment equivalent to the offense committed.",                       example:"He demanded justice — <mark>an eye for an eye</mark>."},
+  {n:23, expr:"Face the music",                              type:"idiom",   cat:"Consequences",    meaning:"Accept and deal with the unpleasant consequences of your actions.",     example:"He made the mistake, and now he has to <mark>face the music</mark>."},
+  {n:24, expr:"Feeling under the weather",                   type:"idiom",   cat:"Health",          meaning:"Feeling ill or unwell.",                                                example:"I'm a bit <mark>under the weather</mark> — I think I'm getting a cold."},
+  {n:25, expr:"Fingers crossed",                             type:"phrase",  cat:"Luck & Fate",     meaning:"Hoping for good luck or a positive outcome.",                           example:"The results come out tomorrow — <mark>fingers crossed</mark>!"},
+  {n:26, expr:"Get out of hand",                             type:"idiom",   cat:"Control",         meaning:"Become uncontrolled or chaotic.",                                       example:"The party <mark>got completely out of hand</mark> by midnight."},
+  {n:27, expr:"Get your act together",                       type:"phrase",  cat:"Character",       meaning:"Organize yourself; start behaving more responsibly.",                   example:"If you want to pass, you need to <mark>get your act together</mark>."},
+  {n:28, expr:"Give the cold shoulder",                      type:"idiom",   cat:"Relationships",   meaning:"Deliberately ignore someone.",                                          example:"Ever since their argument, she's been <mark>giving him the cold shoulder</mark>."},
+  {n:29, expr:"Hit the nail on the head",                    type:"idiom",   cat:"Communication",   meaning:"Describe exactly what is causing a situation or problem.",              example:"You <mark>hit the nail on the head</mark> — that's exactly what the issue is."},
+  {n:30, expr:"Hold your horses",                            type:"idiom",   cat:"Caution",         meaning:"Wait a moment; be patient before acting.",                              example:"<mark>Hold your horses</mark> — we need to think this through first."},
+  {n:31, expr:"If it isn't broke, don't fix it",             type:"proverb", cat:"Caution",         meaning:"Don't change something that is already working fine.",                  example:"The system runs perfectly — <mark>if it isn't broke, don't fix it</mark>."},
+  {n:32, expr:"In hot water",                                type:"idiom",   cat:"Bad Situations",  meaning:"In trouble or a difficult situation.",                                  example:"He's <mark>in hot water</mark> with his boss after missing three deadlines."},
+  {n:33, expr:"Jump on the bandwagon",                       type:"idiom",   cat:"Trends",          meaning:"Join a popular trend or activity many others are doing.",               example:"Everyone <mark>jumped on the bandwagon</mark> when the new app launched."},
+  {n:34, expr:"Kick the bucket",                             type:"slang",   cat:"Life & Death",    meaning:"To die (used humorously or informally).",                               example:"Old Mr. Thompson finally <mark>kicked the bucket</mark> at the age of 95."},
+  {n:35, expr:"Know the ropes",                              type:"idiom",   cat:"Experience",      meaning:"Understand how something works; be experienced and knowledgeable.",      example:"She's been here for years — she really <mark>knows the ropes</mark>."},
+  {n:36, expr:"Let the cat out of the bag",                  type:"idiom",   cat:"Communication",   meaning:"Accidentally reveal a secret.",                                         example:"He <mark>let the cat out of the bag</mark> about the surprise party."},
+  {n:37, expr:"Like two peas in a pod",                      type:"idiom",   cat:"Relationships",   meaning:"Very similar to each other; inseparable.",                              example:"Those two sisters are <mark>like two peas in a pod</mark> — always together."},
+  {n:38, expr:"Make ends meet",                              type:"idiom",   cat:"Money",           meaning:"To manage financially with limited resources.",                          example:"With two jobs, she was barely <mark>making ends meet</mark>."},
+  {n:39, expr:"Miss the boat",                               type:"idiom",   cat:"Opportunities",   meaning:"Miss an opportunity; be too late to take advantage of something.",      example:"He <mark>missed the boat</mark> on investing early in that startup."},
+  {n:40, expr:"No pain, no gain",                            type:"proverb", cat:"Work & Effort",   meaning:"You have to work hard to achieve something worthwhile.",                example:"Training hurts every day, but <mark>no pain, no gain</mark>."},
+  {n:41, expr:"Off the hook",                                type:"idiom",   cat:"Consequences",    meaning:"Freed from blame, responsibility, or an obligation.",                   example:"The charges were dropped — he's completely <mark>off the hook</mark>."},
+  {n:42, expr:"On thin ice",                                 type:"idiom",   cat:"Bad Situations",  meaning:"In a risky or precarious situation.",                                   example:"After the third warning, he's <mark>on thin ice</mark> with his employer."},
+  {n:43, expr:"Pull someone's leg",                          type:"idiom",   cat:"Humour",          meaning:"To joke with or tease someone.",                                        example:"Are you serious? Or are you <mark>pulling my leg</mark>?"},
+  {n:44, expr:"Put all your eggs in one basket",             type:"proverb", cat:"Caution",         meaning:"Risk everything on a single venture or option.",                        example:"He invested everything in one stock — never <mark>put all your eggs in one basket</mark>."},
+  {n:45, expr:"Quick on the draw",                           type:"idiom",   cat:"Character",       meaning:"Quick to react or respond to a situation.",                             example:"She's <mark>quick on the draw</mark> — she answered before anyone else."},
+  {n:46, expr:"Read between the lines",                      type:"idiom",   cat:"Communication",   meaning:"Understand the hidden meaning behind what is said.",                   example:"<mark>Reading between the lines</mark>, it's clear she wasn't happy."},
+  {n:47, expr:"Right off the bat",                           type:"phrase",  cat:"Time",            meaning:"Immediately; without any delay.",                                       example:"<mark>Right off the bat</mark>, she knew something was wrong."},
+  {n:48, expr:"Spill the beans",                             type:"idiom",   cat:"Communication",   meaning:"Reveal secret information, often unintentionally.",                    example:"Don't <mark>spill the beans</mark> about the surprise — it's a secret!"},
+  {n:49, expr:"Steal someone's thunder",                     type:"idiom",   cat:"Relationships",   meaning:"Take attention or credit away from someone else.",                     example:"He announced his news right after hers — <mark>stealing her thunder</mark>."},
+  {n:50, expr:"Straight from the horse's mouth",             type:"idiom",   cat:"Communication",   meaning:"Directly from the original or most reliable source.",                  example:"I heard it <mark>straight from the horse's mouth</mark> — the CEO confirmed it."},
+  {n:51, expr:"Take it with a grain of salt",                type:"idiom",   cat:"Attitude",        meaning:"Don't take it too seriously; be skeptical.",                           example:"<mark>Take his stories with a grain of salt</mark> — he tends to exaggerate."},
+  {n:52, expr:"The ball is in your court",                   type:"idiom",   cat:"Responsibility",  meaning:"It's your decision or responsibility now.",                             example:"I've made my offer — <mark>the ball is in your court</mark>."},
+  {n:53, expr:"Under the weather",                           type:"idiom",   cat:"Health",          meaning:"Feeling ill or unwell.",                                                example:"She's been <mark>under the weather</mark> all week — probably the flu."},
+  {n:54, expr:"Up in arms",                                  type:"idiom",   cat:"Emotions",        meaning:"Angry and protesting about something.",                                example:"The workers were <mark>up in arms</mark> over the proposed pay cuts."},
+  {n:55, expr:"Variety is the spice of life",                type:"proverb", cat:"Optimism",        meaning:"Different experiences make life more interesting and enjoyable.",       example:"Try a new cuisine every week — <mark>variety is the spice of life</mark>!"},
+  {n:56, expr:"When pigs fly",                               type:"idiom",   cat:"Impossibility",   meaning:"Something that will never happen.",                                    example:"He'll apologise <mark>when pigs fly</mark> — he never admits he's wrong."},
+  {n:57, expr:"Wild goose chase",                            type:"idiom",   cat:"Mistakes",        meaning:"A futile pursuit or hopeless search.",                                 example:"Searching for that file was a <mark>wild goose chase</mark> — it never existed."},
+  {n:58, expr:"You can't judge a book by its cover",         type:"proverb", cat:"Character",       meaning:"Don't judge someone based solely on appearance.",                      example:"He looked scruffy but was brilliant — <mark>you can't judge a book by its cover</mark>."},
+  {n:59, expr:"A bird in the hand is worth two in the bush", type:"proverb", cat:"Caution",         meaning:"Better to keep what you have than risk losing it seeking more.",        example:"Take the job offer — <mark>a bird in the hand is worth two in the bush</mark>."},
+  {n:60, expr:"A penny for your thoughts",                   type:"phrase",  cat:"Communication",   meaning:"Asking someone what they are thinking about.",                          example:"You've been quiet all evening — <mark>a penny for your thoughts</mark>?"},
+  {n:61, expr:"All bark and no bite",                        type:"idiom",   cat:"Character",       meaning:"Someone who talks tough but never actually takes action.",              example:"Don't worry about his threats — he's <mark>all bark and no bite</mark>."},
+  {n:62, expr:"Bite off more than you can chew",             type:"idiom",   cat:"Mistakes",        meaning:"Take on more responsibility or work than you can handle.",              example:"He <mark>bit off more than he could chew</mark> by managing three projects at once."},
+  {n:63, expr:"Break the ice",                               type:"idiom",   cat:"Communication",   meaning:"Initiate conversation or ease tension in a social situation.",          example:"He told a joke to <mark>break the ice</mark> at the start of the meeting."},
+  {n:64, expr:"Burning the candle at both ends",             type:"idiom",   cat:"Work & Effort",   meaning:"Working excessively hard without enough rest, leading to exhaustion.",  example:"She's <mark>burning the candle at both ends</mark> — work all day, study all night."},
+  {n:65, expr:"Caught red-handed",                           type:"idiom",   cat:"Consequences",    meaning:"Caught in the act of doing something wrong or illegal.",               example:"The shoplifter was <mark>caught red-handed</mark> by the security guard."},
+  {n:66, expr:"Cut to the chase",                            type:"phrase",  cat:"Communication",   meaning:"Get to the point without wasting time on unnecessary details.",         example:"Let's <mark>cut to the chase</mark> — how much will it cost?"},
+  {n:67, expr:"Every dog has its day",                       type:"proverb", cat:"Optimism",        meaning:"Everyone will have their moment of success or good fortune.",           example:"Keep trying — <mark>every dog has its day</mark>, and yours will come."},
+  {n:68, expr:"Falling on deaf ears",                        type:"idiom",   cat:"Communication",   meaning:"When advice or requests are ignored and not listened to.",             example:"All her warnings <mark>fell on deaf ears</mark> — nobody listened."},
+  {n:69, expr:"Get your ducks in a row",                     type:"idiom",   cat:"Work & Effort",   meaning:"Organize yourself and prepare thoroughly for something.",              example:"<mark>Get your ducks in a row</mark> before the investors arrive."},
+  {n:70, expr:"Hit the ground running",                      type:"phrase",  cat:"Work & Effort",   meaning:"Start an activity with great enthusiasm and energy from the beginning.", example:"The new manager <mark>hit the ground running</mark> — she had a plan on day one."},
+  {n:71, expr:"In one ear and out the other",                type:"idiom",   cat:"Communication",   meaning:"When information is not retained; quickly forgotten.",                  example:"I told him three times, but it goes <mark>in one ear and out the other</mark>."},
+  {n:72, expr:"Jump through hoops",                          type:"idiom",   cat:"Difficulty",      meaning:"Go through many complicated procedures to achieve something.",          example:"I had to <mark>jump through so many hoops</mark> just to get a visa."},
+  {n:73, expr:"Keep your chin up",                           type:"phrase",  cat:"Encouragement",   meaning:"Stay positive and remain optimistic during difficult times.",           example:"I know it's hard, but <mark>keep your chin up</mark> — things will improve."},
+  {n:74, expr:"Leave no stone unturned",                     type:"idiom",   cat:"Work & Effort",   meaning:"Make every possible effort; search thoroughly for solutions.",          example:"The detective <mark>left no stone unturned</mark> in the investigation."},
+  {n:75, expr:"Make hay while the sun shines",               type:"proverb", cat:"Opportunities",   meaning:"Take advantage of opportunities while conditions are favourable.",      example:"Sales are booming — <mark>make hay while the sun shines</mark>."},
+  {n:76, expr:"Not playing with a full deck",                type:"slang",   cat:"Character",       meaning:"Not mentally sound; lacking good judgement.",                           example:"He agreed to that deal? He must not be <mark>playing with a full deck</mark>."},
+  {n:77, expr:"Out of left field",                           type:"idiom",   cat:"Surprise",        meaning:"Unexpectedly surprising; coming from an unexpected direction.",         example:"His resignation came <mark>completely out of left field</mark> — nobody saw it coming."},
+  {n:78, expr:"Put your money where your mouth is",          type:"phrase",  cat:"Character",       meaning:"Back up your words with concrete actions.",                             example:"If you believe in the project, <mark>put your money where your mouth is</mark>."},
+  {n:79, expr:"Raining cats and dogs",                       type:"idiom",   cat:"Weather",         meaning:"Raining very heavily.",                                                 example:"Bring an umbrella — it's <mark>raining cats and dogs</mark> out there."},
+  {n:80, expr:"See eye to eye",                              type:"idiom",   cat:"Relationships",   meaning:"Agree with someone; share the same opinion.",                           example:"They rarely <mark>see eye to eye</mark> on business strategy."},
+  {n:81, expr:"Sink or swim",                                type:"idiom",   cat:"Consequences",    meaning:"Succeed or fail entirely based on one's own efforts.",                  example:"The boss threw him in with no training — <mark>sink or swim</mark>."},
+  {n:82, expr:"Sit on the fence",                            type:"idiom",   cat:"Attitude",        meaning:"Avoid making a decision or taking a side.",                            example:"Stop <mark>sitting on the fence</mark> and tell us which option you prefer."},
+  {n:83, expr:"Smell a rat",                                 type:"idiom",   cat:"Suspicion",       meaning:"Suspect that something dishonest or wrong is happening.",              example:"When the numbers didn't add up, I started to <mark>smell a rat</mark>."},
+  {n:84, expr:"Speak of the devil",                          type:"phrase",  cat:"Surprise",        meaning:"Said when the person just mentioned appears unexpectedly.",             example:"<mark>Speak of the devil</mark> — we were just talking about you!"},
+  {n:85, expr:"Take with a pinch of salt",                   type:"idiom",   cat:"Attitude",        meaning:"View something skeptically; don't take it too seriously.",             example:"<mark>Take his statistics with a pinch of salt</mark> — he exaggerates."},
+  {n:86, expr:"The early bird catches the worm",             type:"proverb", cat:"Work & Effort",   meaning:"Those who act early or promptly have an advantage.",                   example:"She arrived an hour before everyone — <mark>the early bird catches the worm</mark>."},
+  {n:87, expr:"The elephant in the room",                    type:"idiom",   cat:"Communication",   meaning:"An obvious problem everyone avoids discussing.",                        example:"Nobody mentioned the deficit — it was <mark>the elephant in the room</mark>."},
+  {n:88, expr:"Throw in the towel",                          type:"idiom",   cat:"Consequences",    meaning:"Give up after repeated failures; admit defeat.",                        example:"After five failed attempts, he finally <mark>threw in the towel</mark>."},
+  {n:89, expr:"Turn over a new leaf",                        type:"idiom",   cat:"Character",       meaning:"Make positive changes in your life; start behaving better.",            example:"After rehab, he <mark>turned over a new leaf</mark> and became a better person."},
+  {n:90, expr:"Under one's thumb",                           type:"idiom",   cat:"Control",         meaning:"Completely under someone else's control or influence.",                 example:"His manager has him completely <mark>under her thumb</mark>."},
+  {n:91, expr:"Up against the wall",                         type:"phrase",  cat:"Bad Situations",  meaning:"In a very difficult situation with no easy way out.",                  example:"With debts piling up, the company was <mark>up against the wall</mark>."},
+  {n:92, expr:"Walking on eggshells",                        type:"idiom",   cat:"Relationships",   meaning:"Being extremely cautious to avoid upsetting someone.",                 example:"Everyone <mark>walks on eggshells</mark> around him when he's in a bad mood."},
+  {n:93, expr:"What goes around comes around",               type:"proverb", cat:"Justice",         meaning:"Actions — good or bad — eventually return to you.",                    example:"He treated everyone poorly for years — <mark>what goes around comes around</mark>."},
+  {n:94, expr:"When it rains, it pours",                     type:"proverb", cat:"Bad Situations",  meaning:"Problems or misfortunes tend to come all at once.",                    example:"Car broke down, then I lost my wallet — <mark>when it rains, it pours</mark>."},
+  {n:95, expr:"You can't have your cake and eat it too",     type:"proverb", cat:"Choices",         meaning:"You cannot enjoy both sides of a situation; you must choose.",          example:"You want the salary but not the work? <mark>You can't have your cake and eat it too</mark>."},
+  {n:96, expr:"Your guess is as good as mine",               type:"phrase",  cat:"Knowledge",       meaning:"I don't know either — we're equally uncertain.",                        example:"Where did he go? <mark>Your guess is as good as mine</mark>."},
+  {n:97, expr:"All's fair in love and war",                  type:"proverb", cat:"Choices",         meaning:"In certain situations, any action is considered acceptable.",           example:"He took her number from a friend — <mark>all's fair in love and war</mark>."},
+  {n:98, expr:"Bite the dust",                               type:"slang",   cat:"Life & Death",    meaning:"To fail or die.",                                                      example:"That startup <mark>bit the dust</mark> after just six months."},
+  {n:99, expr:"Burn bridges",                                type:"idiom",   cat:"Relationships",   meaning:"Permanently destroy a relationship or opportunity.",                    example:"Don't <mark>burn bridges</mark> with your old employer — you may need them."},
+  {n:100,expr:"Caught off guard",                            type:"phrase",  cat:"Surprise",        meaning:"Unprepared for an unexpected event.",                                   example:"The question <mark>caught her completely off guard</mark> during the interview."},
+  {n:101,expr:"Chasing rainbows",                            type:"idiom",   cat:"Attitude",        meaning:"Pursuing unrealistic or impossible goals.",                             example:"He's been <mark>chasing rainbows</mark> with that invention for years."},
+  {n:102,expr:"Cold feet",                                   type:"idiom",   cat:"Emotions",        meaning:"Nervousness or doubt before an important event or decision.",           example:"He got <mark>cold feet</mark> right before the wedding ceremony."},
+  {n:103,expr:"Cross that bridge when you come to it",       type:"phrase",  cat:"Attitude",        meaning:"Deal with problems only when they actually arise.",                     example:"Don't worry about the next stage — <mark>cross that bridge when you come to it</mark>."},
+  {n:104,expr:"Cut loose",                                   type:"phrase",  cat:"Freedom",         meaning:"Let go; become free from restrictions or obligations.",                 example:"After exams, we finally <mark>cut loose</mark> and had a great night out."},
+  {n:105,expr:"Devil's advocate",                            type:"phrase",  cat:"Communication",   meaning:"Argue against something to test the argument, even if you agree.",     example:"Let me play <mark>devil's advocate</mark> — what if the plan fails?"},
+  {n:106,expr:"Fly off the handle",                          type:"idiom",   cat:"Emotions",        meaning:"React suddenly and angrily; lose one's temper.",                       example:"He <mark>flies off the handle</mark> at the slightest criticism."},
+  {n:107,expr:"Go down in flames",                           type:"idiom",   cat:"Consequences",    meaning:"Fail spectacularly and publicly.",                                      example:"The product launch <mark>went down in flames</mark> — nothing worked."},
+  {n:108,expr:"Hit rock bottom",                             type:"idiom",   cat:"Emotions",        meaning:"Reach the lowest possible point emotionally or financially.",           example:"He <mark>hit rock bottom</mark> after losing his job, his home, and his family."},
+  {n:109,expr:"In for a penny, in for a pound",              type:"proverb", cat:"Choices",         meaning:"If you're going to take a risk at all, you might as well go all in.",  example:"We've invested this much already — <mark>in for a penny, in for a pound</mark>."},
+  {n:110,expr:"Jump ship",                                   type:"idiom",   cat:"Work & Effort",   meaning:"Abandon an organization or situation suddenly.",                        example:"Several key employees <mark>jumped ship</mark> right before the company collapsed."},
+  {n:111,expr:"Keep your friends close but enemies closer",  type:"proverb", cat:"Suspicion",       meaning:"Know your enemies well so you can be prepared for them.",              example:"He invited his rival to lunch — <mark>keep your friends close but enemies closer</mark>."},
+  {n:112,expr:"Let sleeping dogs lie",                       type:"proverb", cat:"Caution",         meaning:"Avoid stirring up old trouble or reopening resolved issues.",           example:"Don't bring up that argument again — <mark>let sleeping dogs lie</mark>."},
+  {n:113,expr:"Make no bones about it",                      type:"phrase",  cat:"Communication",   meaning:"Speak plainly and directly without hesitation.",                        example:"She <mark>made no bones about it</mark> — she hated the new policy."},
+  {n:114,expr:"Missed the boat",                             type:"idiom",   cat:"Opportunities",   meaning:"Missed an opportunity; arrived or acted too late.",                     example:"He <mark>missed the boat</mark> on buying that property when prices were low."},
+  {n:115,expr:"No use crying over spilled milk",             type:"proverb", cat:"Attitude",        meaning:"Don't waste time worrying about things that can't be changed.",         example:"The project failed — <mark>no use crying over spilled milk</mark>, start fresh."},
+  {n:116,expr:"On cloud nine",                               type:"idiom",   cat:"Emotions",        meaning:"Extremely happy; in a state of pure joy and elation.",                  example:"She was <mark>on cloud nine</mark> after getting engaged."},
+  {n:117,expr:"Out of pocket",                               type:"phrase",  cat:"Availability",    meaning:"Unavailable for contact; unreachable.",                                 example:"I'll be <mark>out of pocket</mark> all week — contact my assistant."},
+  {n:118,expr:"Paint yourself into a corner",                type:"idiom",   cat:"Mistakes",        meaning:"Create an impossible or inescapable situation for yourself.",           example:"By making all those promises, he <mark>painted himself into a corner</mark>."},
+  {n:119,expr:"Penny pincher",                               type:"slang",   cat:"Money",           meaning:"Someone extremely stingy or careful with money.",                       example:"He's such a <mark>penny pincher</mark> — he won't even tip at restaurants."},
+  {n:120,expr:"Pull strings",                                type:"idiom",   cat:"Influence",       meaning:"Use personal connections or influence to achieve a result.",            example:"She <mark>pulled strings</mark> to get her son into the best school."},
+  {n:121,expr:"Sitting pretty",                              type:"phrase",  cat:"Luck & Fate",     meaning:"In a very comfortable or favourable position.",                         example:"With a guaranteed contract, they're <mark>sitting pretty</mark> for two years."},
+  {n:122,expr:"Sow wild oats",                               type:"idiom",   cat:"Youth",           meaning:"Engage in youthful indiscretions before settling down.",                example:"He spent his twenties <mark>sowing wild oats</mark> before finally settling down."},
+  {n:123,expr:"Tied up in knots",                            type:"idiom",   cat:"Emotions",        meaning:"Confused, anxious, or stressed about a situation.",                     example:"She was <mark>tied up in knots</mark> before her first public speech."},
+  {n:124,expr:"Tighten one's belt",                          type:"idiom",   cat:"Money",           meaning:"Spend less money due to economic hardship.",                            example:"With rising prices, most families had to <mark>tighten their belts</mark>."},
+  {n:125,expr:"Took the wind out of sails",                  type:"idiom",   cat:"Emotions",        meaning:"Disheartened someone by an unexpected setback.",                        example:"The negative review really <mark>took the wind out of her sails</mark>."},
+  {n:126,expr:"Turn back the clock",                         type:"idiom",   cat:"Time",            meaning:"Return things to how they were before.",                                example:"If I could <mark>turn back the clock</mark>, I'd have studied harder."},
+  {n:127,expr:"Under wraps",                                 type:"phrase",  cat:"Communication",   meaning:"Kept secret; not publicly revealed.",                                   example:"The new product is still <mark>under wraps</mark> until the official launch."},
+  {n:128,expr:"Walk down memory lane",                       type:"phrase",  cat:"Time",            meaning:"Reminiscing about fond or significant past events.",                    example:"Looking at those old photos was a real <mark>walk down memory lane</mark>."},
+  {n:129,expr:"Wipe the slate clean",                        type:"idiom",   cat:"Character",       meaning:"Start fresh, without past mistakes affecting the future.",              example:"They agreed to <mark>wipe the slate clean</mark> and rebuild their friendship."},
+  {n:130,expr:"You can't teach an old dog new tricks",       type:"proverb", cat:"Character",       meaning:"It's difficult for older people to learn new skills or change habits.", example:"He refuses to use a smartphone — <mark>you can't teach an old dog new tricks</mark>."},
+  {n:131,expr:"A house divided against itself cannot stand", type:"proverb", cat:"Unity",           meaning:"Internal conflict leads to failure; unity is essential for strength.",  example:"The team kept arguing — <mark>a house divided against itself cannot stand</mark>."},
+  {n:132,expr:"All hands on deck",                           type:"phrase",  cat:"Work & Effort",   meaning:"Everyone must help — a call for all available people.",                  example:"The deadline is tomorrow — <mark>all hands on deck</mark>!"},
+  {n:133,expr:"Barking dogs seldom bite",                    type:"proverb", cat:"Character",       meaning:"Those who make the loudest threats rarely follow through.",             example:"Ignore his shouting — <mark>barking dogs seldom bite</mark>."},
+  {n:134,expr:"Birds of a feather flock together",           type:"proverb", cat:"Relationships",   meaning:"People with similar interests or values tend to associate together.",    example:"They both love extreme sports — <mark>birds of a feather flock together</mark>."},
+  {n:135,expr:"Can't see the forest for the trees",          type:"idiom",   cat:"Attitude",        meaning:"Too focused on small details to see the bigger picture.",               example:"You're obsessing over fonts — <mark>you can't see the forest for the trees</mark>."},
+  {n:136,expr:"Don't bite the hand that feeds you",          type:"proverb", cat:"Relationships",   meaning:"Don't harm or disrespect the person who supports you.",                 example:"Criticising your sponsor publicly? <mark>Don't bite the hand that feeds you</mark>."},
+  {n:137,expr:"Every rose has its thorn",                    type:"proverb", cat:"Life & Fate",     meaning:"Every good or beautiful thing has its own drawbacks.",                  example:"The job pays well but has long hours — <mark>every rose has its thorn</mark>."},
+  {n:138,expr:"Fool me once, shame on you; twice, shame on me", type:"proverb", cat:"Caution",     meaning:"After being deceived once, it's your own fault to allow it again.",     example:"He lied again? <mark>Fool me once, shame on you</mark> — fool me twice, shame on me."},
+  {n:139,expr:"Good things come to those who wait",          type:"proverb", cat:"Patience",        meaning:"Patience is eventually rewarded; good outcomes take time.",              example:"The visa finally came through — <mark>good things come to those who wait</mark>."},
+  {n:140,expr:"Haste makes waste",                           type:"proverb", cat:"Caution",         meaning:"Rushing leads to mistakes and poor results.",                           example:"Check your work before submitting — <mark>haste makes waste</mark>."},
+  {n:141,expr:"Killing time",                                type:"phrase",  cat:"Time",            meaning:"Passing time while waiting for something.",                             example:"He was <mark>killing time</mark> at the airport by reading a magazine."},
+  {n:142,expr:"Might as well be hanged for a sheep as a lamb",type:"proverb",cat:"Choices",        meaning:"If you're already in trouble, you might as well go all in.",             example:"We're late anyway — <mark>might as well be hanged for a sheep as a lamb</mark>."},
+  {n:143,expr:"Nail it",                                     type:"slang",   cat:"Success",         meaning:"Perfectly accomplish something.",                                        example:"She absolutely <mark>nailed</mark> the presentation — everyone was impressed."},
+  {n:144,expr:"Nobody's perfect",                            type:"phrase",  cat:"Character",       meaning:"Everyone makes mistakes; no one is without flaws.",                     example:"I forgot the anniversary — but <mark>nobody's perfect</mark>, right?"},
+  {n:145,expr:"Shooting fish in a barrel",                   type:"idiom",   cat:"Difficulty",      meaning:"An extremely easy task requiring very little effort.",                  example:"Selling to those customers was like <mark>shooting fish in a barrel</mark>."},
+  {n:146,expr:"It takes two to tango",                       type:"proverb", cat:"Responsibility",  meaning:"Both parties involved in a situation share responsibility.",             example:"Don't blame only her — <mark>it takes two to tango</mark>."},
+  {n:147,expr:"Tongue-in-cheek",                             type:"phrase",  cat:"Humour",          meaning:"Not meant seriously; said or done with humorous irony.",                example:"His speech was <mark>tongue-in-cheek</mark> — he was joking the whole time."},
+  {n:148,expr:"A leopard can't change its spots",            type:"proverb", cat:"Character",       meaning:"A person's fundamental nature cannot easily be changed.",               example:"He promised to be different but relapsed — <mark>a leopard can't change its spots</mark>."},
+  // ── PHRASAL VERBS ──────────────────────────────────────────────────────────
+  {n:149,expr:"Back down",       type:"phrasal verb",cat:"Relationships", meaning:"Withdraw from a position or argument you were defending.",              example:"He refused to <mark>back down</mark> even when everyone disagreed with him."},
+  {n:150,expr:"Back up",         type:"phrasal verb",cat:"Communication", meaning:"Support someone's claim or story; or move backwards.",                  example:"Can you <mark>back up</mark> that statement with some evidence?"},
+  {n:151,expr:"Bear with",       type:"phrasal verb",cat:"Patience",      meaning:"Be patient with someone or something.",                                 example:"Please <mark>bear with</mark> me while I find the right document."},
+  {n:152,expr:"Blow up",         type:"phrasal verb",cat:"Anger",         meaning:"Suddenly become very angry; or explode.",                               example:"He <mark>blew up</mark> at his team after the third mistake in a row."},
+  {n:153,expr:"Break down",      type:"phrasal verb",cat:"Emotions",      meaning:"Stop functioning; or lose emotional control.",                          example:"She <mark>broke down</mark> in tears when she heard the news."},
+  {n:154,expr:"Break into",      type:"phrasal verb",cat:"Work & Effort", meaning:"Enter a new field or industry with effort.",                            example:"It took years to <mark>break into</mark> the film industry."},
+  {n:155,expr:"Break up",        type:"phrasal verb",cat:"Relationships", meaning:"End a romantic relationship; or separate into parts.",                  example:"They <mark>broke up</mark> after two years together."},
+  {n:156,expr:"Bring about",     type:"phrasal verb",cat:"Consequences",  meaning:"Cause something to happen.",                                            example:"The new law <mark>brought about</mark> significant changes in the workplace."},
+  {n:157,expr:"Bring up",        type:"phrasal verb",cat:"Communication", meaning:"Introduce a topic; or raise a child.",                                  example:"She <mark>brought up</mark> the budget issue during the meeting."},
+  {n:158,expr:"Call off",        type:"phrasal verb",cat:"Planning",      meaning:"Cancel something that was planned.",                                    example:"They <mark>called off</mark> the event due to bad weather."},
+  {n:159,expr:"Calm down",       type:"phrasal verb",cat:"Emotions",      meaning:"Become less upset or agitated; or help someone do so.",                 example:"<mark>Calm down</mark> — there's no need to panic."},
+  {n:160,expr:"Carry on",        type:"phrasal verb",cat:"Persistence",   meaning:"Continue doing something despite difficulties.",                         example:"Despite the setbacks, she <mark>carried on</mark> with the project."},
+  {n:161,expr:"Catch up",        type:"phrasal verb",cat:"Progress",      meaning:"Reach the same level as others; or update someone on missed events.",   example:"I need to <mark>catch up</mark> on the work I missed while I was sick."},
+  {n:162,expr:"Check in",        type:"phrasal verb",cat:"Communication", meaning:"Register your arrival; or contact someone to see how they are.",        example:"Don't forget to <mark>check in</mark> online before your flight."},
+  {n:163,expr:"Check out",       type:"phrasal verb",cat:"Socialising",   meaning:"Leave a hotel; or investigate something interesting.",                   example:"You should <mark>check out</mark> that new restaurant downtown."},
+  {n:164,expr:"Cheer up",        type:"phrasal verb",cat:"Emotions",      meaning:"Become happier; or make someone feel better.",                          example:"Her friends tried to <mark>cheer her up</mark> after the breakup."},
+  {n:165,expr:"Come across",     type:"phrasal verb",cat:"Surprise",      meaning:"Find or encounter something by chance; or make a certain impression.",  example:"I <mark>came across</mark> this old photo while cleaning my room."},
+  {n:166,expr:"Come up with",    type:"phrasal verb",cat:"Work & Effort", meaning:"Produce or think of an idea or solution.",                              example:"She <mark>came up with</mark> a brilliant idea to cut costs."},
+  {n:167,expr:"Count on",        type:"phrasal verb",cat:"Relationships", meaning:"Rely on someone to do something.",                                       example:"You can always <mark>count on</mark> him when things get difficult."},
+  {n:168,expr:"Cut back on",     type:"phrasal verb",cat:"Money",         meaning:"Reduce the amount of something, especially spending.",                   example:"We need to <mark>cut back on</mark> expenses before the end of quarter."},
+  {n:169,expr:"Deal with",       type:"phrasal verb",cat:"Consequences",  meaning:"Handle or take action to manage a problem or situation.",               example:"She knows how to <mark>deal with</mark> difficult customers calmly."},
+  {n:170,expr:"Drop out",        type:"phrasal verb",cat:"Choices",       meaning:"Leave a course, school, or activity before finishing it.",              example:"He <mark>dropped out</mark> of university to start his own business."},
+  {n:171,expr:"End up",          type:"phrasal verb",cat:"Consequences",  meaning:"Eventually reach a place, situation, or outcome.",                      example:"They took the wrong turn and <mark>ended up</mark> in the wrong city."},
+  {n:172,expr:"Fall behind",     type:"phrasal verb",cat:"Work & Effort", meaning:"Fail to keep up with the required pace or progress.",                   example:"He <mark>fell behind</mark> on his assignments and had to work all weekend."},
+  {n:173,expr:"Fall for",        type:"phrasal verb",cat:"Relationships", meaning:"Develop romantic feelings for someone; or be deceived by something.",   example:"She <mark>fell for</mark> him the moment they met."},
+  {n:174,expr:"Figure out",      type:"phrasal verb",cat:"Knowledge",     meaning:"Understand or solve something after thinking about it.",                 example:"It took me a while to <mark>figure out</mark> how the software works."},
+  {n:175,expr:"Get along with",  type:"phrasal verb",cat:"Relationships", meaning:"Have a friendly relationship with someone.",                             example:"She <mark>gets along with</mark> everyone in the office."},
+  {n:176,expr:"Get away with",   type:"phrasal verb",cat:"Consequences",  meaning:"Escape punishment or criticism for something wrong.",                    example:"He <mark>got away with</mark> being late because the boss wasn't in."},
+  {n:177,expr:"Get over",        type:"phrasal verb",cat:"Emotions",      meaning:"Recover from an illness, disappointment, or difficult experience.",      example:"It took months to <mark>get over</mark> the loss of his job."},
+  {n:178,expr:"Give in",         type:"phrasal verb",cat:"Attitude",      meaning:"Stop resisting; yield to pressure.",                                     example:"After hours of negotiation, they finally <mark>gave in</mark>."},
+  {n:179,expr:"Give up",         type:"phrasal verb",cat:"Persistence",   meaning:"Stop trying; abandon an effort or habit.",                              example:"Don't <mark>give up</mark> — you're almost there."},
+  {n:180,expr:"Go ahead",        type:"phrasal verb",cat:"Planning",      meaning:"Proceed with something; or give permission.",                            example:"The team decided to <mark>go ahead</mark> with the launch despite the risks."},
+  {n:181,expr:"Go through",      type:"phrasal verb",cat:"Difficulty",    meaning:"Experience or endure a difficult situation.",                            example:"She <mark>went through</mark> a lot after the accident."},
+  {n:182,expr:"Hand in",         type:"phrasal verb",cat:"Work & Effort", meaning:"Submit work or a document.",                                             example:"Please <mark>hand in</mark> your reports by Friday afternoon."},
+  {n:183,expr:"Hang out",        type:"phrasal verb",cat:"Socialising",   meaning:"Spend time relaxing with others.",                                       example:"We used to <mark>hang out</mark> at the park every weekend."},
+  {n:184,expr:"Keep up with",    type:"phrasal verb",cat:"Progress",      meaning:"Stay at the same level or pace as someone or something.",                example:"It's hard to <mark>keep up with</mark> all the changes in technology."},
+  {n:185,expr:"Let down",        type:"phrasal verb",cat:"Relationships", meaning:"Disappoint someone who trusted you.",                                    example:"He promised to help but <mark>let her down</mark> at the last minute."},
+  {n:186,expr:"Look after",      type:"phrasal verb",cat:"Relationships", meaning:"Take care of someone or something.",                                     example:"Can you <mark>look after</mark> my cat while I'm away?"},
+  {n:187,expr:"Look forward to", type:"phrasal verb",cat:"Emotions",      meaning:"Feel excitement or pleasure about something in the future.",             example:"I'm really <mark>looking forward to</mark> the holiday."},
+  {n:188,expr:"Look into",       type:"phrasal verb",cat:"Knowledge",     meaning:"Investigate or examine something carefully.",                            example:"The manager agreed to <mark>look into</mark> the complaint."},
+  {n:189,expr:"Make up",         type:"phrasal verb",cat:"Relationships", meaning:"Reconcile after an argument; or invent a story.",                       example:"They argued yesterday but <mark>made up</mark> this morning."},
+  {n:190,expr:"Move on",         type:"phrasal verb",cat:"Attitude",      meaning:"Stop dwelling on the past and continue with life.",                      example:"It's time to <mark>move on</mark> and focus on the future."},
+  {n:191,expr:"Pass out",        type:"phrasal verb",cat:"Health",        meaning:"Lose consciousness; faint.",                                             example:"The heat was so intense that two runners <mark>passed out</mark>."},
+  {n:192,expr:"Pick up",         type:"phrasal verb",cat:"Progress",      meaning:"Collect something or someone; or learn a skill informally.",             example:"She <mark>picked up</mark> Spanish just by watching TV shows."},
+  {n:193,expr:"Point out",       type:"phrasal verb",cat:"Communication", meaning:"Draw attention to something; indicate or mention clearly.",              example:"He <mark>pointed out</mark> several errors in the contract."},
+  {n:194,expr:"Put off",         type:"phrasal verb",cat:"Avoidance",     meaning:"Postpone or delay something; or cause someone to lose interest.",        example:"Stop <mark>putting off</mark> the difficult conversations."},
+  {n:195,expr:"Run into",        type:"phrasal verb",cat:"Surprise",      meaning:"Meet someone unexpectedly; or encounter a problem.",                     example:"I <mark>ran into</mark> my old teacher at the supermarket."},
+  {n:196,expr:"Set up",          type:"phrasal verb",cat:"Planning",      meaning:"Arrange or prepare something; establish a business or system.",          example:"They <mark>set up</mark> the new office in just three days."},
+  {n:197,expr:"Show up",         type:"phrasal verb",cat:"Consequences",  meaning:"Arrive or appear somewhere; make an appearance.",                        example:"Half the team didn't even <mark>show up</mark> for the meeting."},
+  {n:198,expr:"Stand out",       type:"phrasal verb",cat:"Success",       meaning:"Be noticeably different or better than others.",                         example:"Her portfolio really <mark>stood out</mark> from the rest."},
+];
+
+/* ═══════════════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════════════ */
+const PAGE_SIZE = 24;
+let state = {
+  query: '', activeType: 'All', activeCat: 'All',
+  favOnly: false, learnedOnly: false,
+  page: 1, view: 'grid',
+  favs: new Set(), learned: new Set(),
+};
+let filtered = [], lbIdx = 0;
+
+/* ═══════════════════════════════════════════════════
+   PERSISTENCE
+═══════════════════════════════════════════════════ */
+function loadState() {
+  try {
+    const favArr = JSON.parse(localStorage.getItem('iv_favs') || '[]');
+    const learnArr = JSON.parse(localStorage.getItem('iv_learned') || '[]');
+    state.favs = new Set(favArr);
+    state.learned = new Set(learnArr);
+    const theme = localStorage.getItem('iv_theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', theme);
+    document.getElementById('themeBtn').textContent = theme === 'dark' ? '☀' : '🌙';
+  } catch(e) {}
+}
+
+function saveState() {
+  try {
+    localStorage.setItem('iv_favs', JSON.stringify([...state.favs]));
+    localStorage.setItem('iv_learned', JSON.stringify([...state.learned]));
+  } catch(e) {}
+}
+
+/* ═══════════════════════════════════════════════════
+   THEME
+═══════════════════════════════════════════════════ */
+function toggleTheme() {
+  const curr = document.documentElement.getAttribute('data-theme');
+  const next = curr === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  document.getElementById('themeBtn').textContent = next === 'dark' ? '☀' : '🌙';
+  localStorage.setItem('iv_theme', next);
+}
+
+/* ═══════════════════════════════════════════════════
+   FILTER PIPELINE
+═══════════════════════════════════════════════════ */
+function getFiltered() {
+  const q = state.query.toLowerCase().trim();
+  return DATA.filter(d => {
+    if (state.activeType !== 'All' && d.type !== state.activeType) return false;
+    if (state.activeCat  !== 'All' && d.cat  !== state.activeCat)  return false;
+    if (state.favOnly    && !state.favs.has(d.n))    return false;
+    if (state.learnedOnly && !state.learned.has(d.n)) return false;
+    if (q && !d.expr.toLowerCase().includes(q) &&
+             !d.meaning.toLowerCase().includes(q) &&
+             !d.cat.toLowerCase().includes(q) &&
+             !d.type.toLowerCase().includes(q)) return false;
+    return true;
+  });
+}
+
+/* ═══════════════════════════════════════════════════
+   RENDER
+═══════════════════════════════════════════════════ */
+function render() {
+  filtered = getFiltered();
+  const total = filtered.length;
+  const pages = Math.ceil(total / PAGE_SIZE);
+  if (state.page > pages) state.page = Math.max(1, pages);
+  const slice = filtered.slice((state.page - 1) * PAGE_SIZE, state.page * PAGE_SIZE);
+
+  const grid = document.getElementById('grid');
+  grid.className = 'grid' + (state.view === 'list' ? ' list-view' : '');
+
+  // Results bar
+  document.getElementById('resultsCount').innerHTML =
+    `<strong>${total}</strong> expression${total !== 1 ? 's' : ''} found`;
+
+  // Progress
+  const pct = state.learned.size / DATA.length * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+
+  // Nav stats
+  document.getElementById('navLearnedCount').textContent = state.learned.size;
+  document.getElementById('navTotalCount').textContent   = DATA.length;
+  document.getElementById('navFavCount').textContent     = state.favs.size;
+  document.getElementById('statTotal').textContent   = DATA.length;
+  document.getElementById('statCats').textContent    = new Set(DATA.map(d => d.cat)).size;
+  document.getElementById('statLearned').textContent = state.learned.size;
+  document.getElementById('statFavs').textContent    = state.favs.size;
+
+  // Cards
+  if (!slice.length) {
+    grid.innerHTML = `<div class="empty-state">
+      <div class="empty-state-icon">🔍</div>
+      <div class="empty-state-text">No expressions match your search.</div>
+    </div>`;
+  } else {
+    grid.innerHTML = slice.map((d, i) => buildCard(d, i)).join('');
+  }
+
+  renderPagination(pages);
+}
+
+function badgeClass(type) {
+  return 'badge badge-' + type.replace(/\s+/g, '-');
+}
+
+function buildCard(d, animIdx) {
+  const col = catColor(d.cat);
+  const isFav  = state.favs.has(d.n);
+  const isLearned = state.learned.has(d.n);
+  const delay = Math.min(animIdx, 12) * 40;
+
+  return `
+  <div class="card${isLearned ? ' learned' : ''}" id="card-${d.n}" style="animation-delay:${delay}ms">
+    <div class="card-bar" style="background:${col}"></div>
+    <div class="card-body">
+      <div class="card-meta">
+        <span class="card-num">#${String(d.n).padStart(3,'0')}</span>
+        <div class="card-badges">
+          <span class="${badgeClass(d.type)}">${d.type}</span>
+          <span class="badge-cat">${d.cat}</span>
+        </div>
+      </div>
+
+      <div class="card-expr">"${d.expr}"</div>
+
+      <div class="card-divider">
+        <div class="card-divider-line"></div>
+        <div class="card-divider-dot"></div>
+        <div class="card-divider-line"></div>
+      </div>
+
+      <div class="card-meaning-block">
+        <div class="card-meaning-label">Meaning</div>
+        <div class="card-meaning">${d.meaning}</div>
+      </div>
+
+      <div class="card-example-block">
+        <div class="card-example-label">Example</div>
+        <div class="card-example">${d.example.replace(/<mark>/g,'<span class="hl">').replace(/<\/mark>/g,'</span>')}</div>
+      </div>
+
+      <div class="card-actions">
+        <div class="card-action-group">
+          <button class="act-btn${isFav ? ' fav-on' : ''}" onclick="toggleFav(${d.n},this)" title="${isFav ? 'Remove from favourites' : 'Add to favourites'}">
+            <span class="act-icon">${isFav ? '♥' : '♡'}</span>
+          </button>
+          <button class="act-btn${isLearned ? ' learned-on' : ''}" onclick="toggleLearned(${d.n},this)" title="${isLearned ? 'Mark as unlearned' : 'Mark as learned'}">
+            <span class="act-icon">${isLearned ? '✓' : '○'}</span> ${isLearned ? 'Learned' : 'Learn'}
+          </button>
+        </div>
+        <div class="card-action-group">
+          <button class="act-btn" onclick="copyExpr(${d.n},this)" title="Copy expression">
+            <span class="act-icon">⎘</span> Copy
+          </button>
+          <button class="act-btn" onclick="shareCard(${d.n},this)" title="Share">
+            <span class="act-icon">↑</span> Share
+          </button>
+          <button class="act-btn" onclick="openLB(${d.n})" title="View full card">⊞</button>
+          <button class="act-btn" onclick="downloadCard(${d.n},this)" title="Download as image">
+            <span class="act-icon">⬇</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="card-learned-overlay">✓</div>
+  </div>`;
+}
+
+/* ═══════════════════════════════════════════════════
+   PAGINATION
+═══════════════════════════════════════════════════ */
+function renderPagination(pages) {
+  const pg = document.getElementById('pagination');
+  if (pages <= 1) { pg.innerHTML = ''; return; }
+  const p = state.page;
+  let html = '';
+  html += `<button class="page-btn" onclick="goPage(${p-1})" ${p===1?'disabled':''}>←</button>`;
+  for (let i = 1; i <= pages; i++) {
+    if (i === 1 || i === pages || Math.abs(i - p) <= 1) {
+      html += `<button class="page-btn ${i===p?'on':''}" onclick="goPage(${i})">${i}</button>`;
+    } else if (Math.abs(i - p) === 2) {
+      html += `<span class="page-info">…</span>`;
+    }
+  }
+  html += `<button class="page-btn" onclick="goPage(${p+1})" ${p===pages?'disabled':''}>→</button>`;
+  pg.innerHTML = html;
+}
+
+function goPage(p) {
+  state.page = p;
+  render();
+  document.getElementById('controls').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* ═══════════════════════════════════════════════════
+   FILTERS
+═══════════════════════════════════════════════════ */
+function buildCatFilters() {
+  const cats = ['All', ...new Set(DATA.map(d => d.cat)).values()].sort((a,b) => a==='All'?-1:a.localeCompare(b));
+  document.getElementById('catFilters').innerHTML = cats.map(c =>
+    `<button class="pill${c==='All'?' on':''}" data-cat="${c}" onclick="setCat(this)">${c}</button>`
+  ).join('');
+}
+
+function setType(btn) {
+  document.querySelectorAll('#typeFilters .pill').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  state.activeType = btn.dataset.type;
+  state.page = 1;
+  render();
+}
+
+function setCat(btn) {
+  document.querySelectorAll('#catFilters .pill').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  state.activeCat = btn.dataset.cat;
+  state.page = 1;
+  render();
+}
+
+function onSearch(val) {
+  state.query = val;
+  state.page = 1;
+  document.getElementById('searchClear').classList.toggle('visible', val.length > 0);
+  render();
+}
+
+function clearSearch() {
+  document.getElementById('searchInput').value = '';
+  document.getElementById('searchClear').classList.remove('visible');
+  onSearch('');
+}
+
+function toggleFavFilter() {
+  state.favOnly = !state.favOnly;
+  if (state.favOnly) state.learnedOnly = false;
+  document.getElementById('favFilterBtn').classList.toggle('active', state.favOnly);
+  document.getElementById('learnedFilterBtn').classList.remove('active');
+  state.page = 1;
+  render();
+}
+
+function toggleLearnedFilter() {
+  state.learnedOnly = !state.learnedOnly;
+  if (state.learnedOnly) state.favOnly = false;
+  document.getElementById('learnedFilterBtn').classList.toggle('active', state.learnedOnly);
+  document.getElementById('favFilterBtn').classList.remove('active');
+  state.page = 1;
+  render();
+}
+
+function setView(v) {
+  state.view = v;
+  document.getElementById('gridViewBtn').classList.toggle('on', v==='grid');
+  document.getElementById('listViewBtn').classList.toggle('on', v==='list');
+  render();
+}
+
+/* ═══════════════════════════════════════════════════
+   FAV & LEARNED
+═══════════════════════════════════════════════════ */
+function toggleFav(n, btn) {
+  if (state.favs.has(n)) {
+    state.favs.delete(n);
+    btn.classList.remove('fav-on');
+    btn.querySelector('.act-icon').textContent = '♡';
+    showToast('Removed from favourites');
+  } else {
+    state.favs.add(n);
+    btn.classList.add('fav-on');
+    btn.querySelector('.act-icon').textContent = '♥';
+    showToast('♥ Added to favourites');
+  }
+  saveState();
+  updateNavStats();
+}
+
+function toggleLearned(n, btn) {
+  const card = document.getElementById('card-' + n);
+  if (state.learned.has(n)) {
+    state.learned.delete(n);
+    btn.classList.remove('learned-on');
+    btn.querySelector('.act-icon').textContent = '○';
+    btn.innerHTML = '<span class="act-icon">○</span> Learn';
+    card.classList.remove('learned');
+    showToast('Marked as not yet learned');
+  } else {
+    state.learned.add(n);
+    btn.classList.add('learned-on');
+    btn.innerHTML = '<span class="act-icon">✓</span> Learned';
+    card.classList.add('learned');
+    showToast('✓ Marked as learned!');
+  }
+  saveState();
+  updateNavStats();
+}
+
+function updateNavStats() {
+  document.getElementById('navLearnedCount').textContent = state.learned.size;
+  document.getElementById('navFavCount').textContent = state.favs.size;
+  document.getElementById('statLearned').textContent = state.learned.size;
+  document.getElementById('statFavs').textContent = state.favs.size;
+  document.getElementById('progressFill').style.width = (state.learned.size / DATA.length * 100) + '%';
+}
+
+/* ═══════════════════════════════════════════════════
+   COPY & SHARE
+═══════════════════════════════════════════════════ */
+async function copyExpr(n, btn) {
+  const d = DATA.find(x => x.n === n);
+  try {
+    await navigator.clipboard.writeText(d.expr);
+    btn.classList.add('copied');
+    btn.innerHTML = '<span class="act-icon">✓</span> Copied';
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = '<span class="act-icon">⎘</span> Copy';
+    }, 1800);
+  } catch(e) { showToast('Could not copy'); }
+}
+
+function shareCard(n, btn) {
+  const d = DATA.find(x => x.n === n);
+  const text = `"${d.expr}"\n→ ${d.meaning}\n\n${d.example.replace(/<[^>]+>/g,'')}\n\n#IdiomVault #EnglishLearning`;
+  if (navigator.share) {
+    navigator.share({ title: d.expr, text }).catch(() => {});
+  } else {
+    navigator.clipboard.writeText(text).then(() => showToast('📋 Copied for sharing!'));
+  }
+}
+
+/* ═══════════════════════════════════════════════════
+   TOAST
+═══════════════════════════════════════════════════ */
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+/* ═══════════════════════════════════════════════════
+   LIGHTBOX
+═══════════════════════════════════════════════════ */
+function openLB(n) {
+  lbIdx = filtered.findIndex(d => d.n === n);
+  if (lbIdx === -1) lbIdx = 0;
+  renderLB();
+  document.getElementById('lbOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function renderLB() {
+  const d = filtered[lbIdx];
+  if (!d) return;
+  const col = catColor(d.cat);
+  const isFav  = state.favs.has(d.n);
+  const isLearned = state.learned.has(d.n);
+  document.getElementById('lbBody').innerHTML = `
+    <div style="height:4px;background:${col};border-radius:4px 4px 0 0;margin:-32px -32px 28px;"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;gap:8px;flex-wrap:wrap;">
+      <span style="font-size:11px;font-weight:700;letter-spacing:.12em;color:var(--tx-muted)">#${String(d.n).padStart(3,'0')}</span>
+      <div style="display:flex;gap:6px;">
+        <span class="${badgeClass(d.type)}">${d.type}</span>
+        <span class="badge-cat">${d.cat}</span>
+      </div>
+    </div>
+    <div style="font-family:var(--font-display);font-size:28px;font-weight:600;font-style:italic;line-height:1.25;color:var(--tx-primary);margin-bottom:20px;">"${d.expr}"</div>
+    <div style="font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--tx-muted);margin-bottom:8px;">Meaning</div>
+    <div style="font-size:16px;font-weight:400;line-height:1.65;color:var(--tx-primary);margin-bottom:20px;opacity:.9;">${d.meaning}</div>
+    <div style="font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--tx-muted);margin-bottom:8px;">Example in context</div>
+    <div style="font-family:var(--font-display);font-size:15px;font-style:italic;line-height:1.65;color:var(--tx-secondary);background:var(--bg-card-alt);border-left:3px solid ${col};padding:12px 16px;border-radius:0 8px 8px 0;margin-bottom:20px;">${d.example.replace(/<mark>/g,'<span style="color:var(--accent);font-weight:600">').replace(/<\/mark>/g,'</span>')}</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="act-btn${isFav?' fav-on':''}" onclick="toggleFav(${d.n},this);renderLB()">
+        <span class="act-icon">${isFav?'♥':'♡'}</span> ${isFav?'Saved':'Save'}
+      </button>
+      <button class="act-btn${isLearned?' learned-on':''}" onclick="toggleLearned(${d.n},this);renderLB()">
+        <span class="act-icon">${isLearned?'✓':'○'}</span> ${isLearned?'Learned':'Mark learned'}
+      </button>
+      <button class="act-btn" onclick="copyExpr(${d.n},this)"><span class="act-icon">⎘</span> Copy</button>
+      <button class="act-btn" onclick="shareCard(${d.n},this)"><span class="act-icon">↑</span> Share</button>
+    </div>`;
+}
+
+function closeLB(e) {
+  if (!e || e.target === document.getElementById('lbOverlay')) {
+    document.getElementById('lbOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+}
+
+function lbPrev() { lbIdx = (lbIdx - 1 + filtered.length) % filtered.length; renderLB(); }
+function lbNext() { lbIdx = (lbIdx + 1) % filtered.length; renderLB(); }
+function lbDownload() { downloadCard(filtered[lbIdx].n, document.getElementById('lbDlBtn')); }
+
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('lbOverlay').classList.contains('open')) return;
+  if (e.key === 'ArrowLeft')  lbPrev();
+  if (e.key === 'ArrowRight') lbNext();
+  if (e.key === 'Escape')     closeLB();
+});
+
+/* ═══════════════════════════════════════════════════
+   IMAGE EXPORT
+═══════════════════════════════════════════════════ */
+const EXPORT_SCHEMES = {
+  "Luck & Fate":{bg:"#0D2B20",tx:"#C8EDD8",ac:"#4FC08D"},
+  "Value":{bg:"#1C1A0E",tx:"#EDE5B8",ac:"#C9A84C"},
+  "Difficulty":{bg:"#1A1230",tx:"#D0C8F0",ac:"#9B8DE0"},
+  "Character":{bg:"#2A1520",tx:"#F0C8D8",ac:"#D4607A"},
+  "Bad Situations":{bg:"#2A0E0E",tx:"#F0C8C8",ac:"#E05050"},
+  "Mistakes":{bg:"#1A1008",tx:"#EDD8B0",ac:"#D4922A"},
+  "Communication":{bg:"#0A1A2E",tx:"#B8D4F0",ac:"#4A90D9"},
+  "Encouragement":{bg:"#0A2010",tx:"#B8ECC8",ac:"#3DB860"},
+  "Work & Effort":{bg:"#1A1200",tx:"#EDDDB8",ac:"#C8901A"},
+  "Caution":{bg:"#0E2018",tx:"#C0E8D0",ac:"#3AAA6A"},
+};
+function exportScheme(cat){return EXPORT_SCHEMES[cat]||{bg:"#141210",tx:"#E0D8C8",ac:"#C9A84C"};}
+
+async function downloadCard(n, btn) {
+  const d = DATA.find(x => x.n === n);
+  const s = exportScheme(d.cat);
+  const wrap = document.createElement('div');
+  wrap.style.cssText = 'position:fixed;left:-9999px;top:0;width:1080px;height:600px;overflow:hidden;border-radius:12px;';
+  const exampleClean = d.example
+    .replace(/<mark>/g,'').replace(/<\/mark>/g,'')
+    .replace(/"/g,'\u201c').replace(/"/g,'\u201d');
+  wrap.innerHTML = `<div style="width:1080px;height:600px;background:${s.bg};color:${s.tx};font-family:Lato,sans-serif;display:flex;flex-direction:column;padding:52px 64px 44px;position:relative;box-sizing:border-box;">
+    <div style="position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(90deg,${s.ac}88,${s.ac},${s.ac}88)"></div>
+    <div style="position:absolute;top:20px;left:20px;width:40px;height:40px;border-top:1.5px solid ${s.ac};border-left:1.5px solid ${s.ac};opacity:.4"></div>
+    <div style="position:absolute;bottom:20px;right:20px;width:40px;height:40px;border-bottom:1.5px solid ${s.ac};border-right:1.5px solid ${s.ac};opacity:.4"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+      <span style="font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:${s.ac};opacity:.65">#${String(d.n).padStart(3,'0')}</span>
+      <span style="font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:${s.ac};border:1.5px solid ${s.ac};padding:4px 14px;border-radius:2px;opacity:.8">${d.type.toUpperCase()}</span>
+    </div>
+    <div style="font-family:'Fraunces',Garamond,Georgia,serif;font-size:44px;font-weight:700;font-style:italic;line-height:1.2;color:${s.tx};margin-bottom:20px;">"${d.expr}"</div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;">
+      <div style="flex:1;height:1px;background:${s.ac};opacity:.2"></div>
+      <div style="width:6px;height:6px;background:${s.ac};opacity:.4;transform:rotate(45deg)"></div>
+      <div style="flex:1;height:1px;background:${s.ac};opacity:.2"></div>
+    </div>
+    <div style="font-size:18px;font-weight:300;line-height:1.65;opacity:.9;margin-bottom:16px;flex:1;">${d.meaning}</div>
+    <div style="font-family:'Fraunces',Garamond,Georgia,serif;font-size:15px;font-style:italic;opacity:.65;border-left:3px solid ${s.ac};padding-left:14px;line-height:1.55;">${exampleClean}</div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:20px;">
+      <span style="font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:${s.ac};opacity:.5">${d.cat}</span>
+      <span style="font-family:'Fraunces',Garamond,Georgia,serif;font-size:12px;font-style:italic;color:${s.ac};opacity:.35">IdiomVault</span>
+    </div>
+  </div>`;
+  document.body.appendChild(wrap);
+  if (btn) { btn.classList.add('dl-loading'); btn.innerHTML = '<span class="act-icon">⏳</span>'; }
+  try {
+    await document.fonts.ready;
+    const canvas = await html2canvas(wrap.firstElementChild, {
+      scale: 2, useCORS: true, backgroundColor: s.bg, width: 1080, height: 600, logging: false
+    });
+    const a = document.createElement('a');
+    a.download = `idiom_${String(d.n).padStart(3,'0')}_${d.expr.replace(/[^a-z0-9]/gi,'_').toLowerCase().slice(0,28)}.png`;
+    a.href = canvas.toDataURL('image/png');
+    a.click();
+  } finally {
+    document.body.removeChild(wrap);
+    if (btn) { btn.classList.remove('dl-loading'); btn.innerHTML = '<span class="act-icon">⬇</span>'; }
+  }
+}
+
+async function downloadAll() {
+  if (!confirm(`Download all ${filtered.length} visible cards as PNG images?\n\nYour browser will save them one by one.`)) return;
+  for (let i = 0; i < filtered.length; i++) {
+    await downloadCard(filtered[i].n, null);
+    await new Promise(r => setTimeout(r, 420));
+  }
+  showToast('✓ All images downloaded!');
+}
+
+/* ═══════════════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════════════ */
+loadState();
+buildCatFilters();
+render();
+</script>
+</body>
+</html>
